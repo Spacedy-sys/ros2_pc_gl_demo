@@ -9,7 +9,8 @@
 |---|---|---|
 | ![](docs/hero_height_voxel.png) | ![](docs/hero_ground.png) | ![](docs/hero_top.png) |
 
-扫描动画（平台绕场运动，遮挡关系逐帧变化）：`docs/demo.gif`
+扫描动画（平台绕场运动，遮挡关系逐帧变化）：`docs/demo.gif` ｜ 视频版：`docs/pc_gl_viewer_demo_6s.mp4`
+一页项目说明（PDF，可直接作为作品附件）：[`docs/demo_one_pager.pdf`](docs/demo_one_pager.pdf)
 
 ---
 

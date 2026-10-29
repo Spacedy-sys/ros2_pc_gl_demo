@@ -120,7 +120,9 @@ ros2 run pc_gl_viewer pc_gl_viewer          # 只跑查看器（可订阅任何 
 > 话题侧实测（`ros2 topic echo`）：`width: 41563`、`point_step: 16`、`row_step: 665008`（= 41563×16）、
 > `frame_id: lidar_link`、字段 `x/y/z/intensity` 偏移 0/4/8/12。
 
-> 部署细节与排错见 [`docs/PROMPT_ubuntu_ros2.md`](docs/PROMPT_ubuntu_ros2.md)。
+> 常见问题：`pkg_check_modules(GLFW3)` 失败 → 少 `libglfw3-dev`；`glfwCreateWindow` 失败 → 没有图形会话
+> （ssh 无 X 转发 / 缺 WSLg）；`glxinfo` 显示 `llvmpipe` 说明是软件渲染（能跑但帧率低）；
+> `ros2 topic hz /points | head` 打印 `BrokenPipeError` 是无害的（`head` 提前关管道）。
 > 小提示：`ros2 topic hz /points | head` 会打印 `BrokenPipeError`，那是 `head` 提前关管道导致的，无害。
 
 ## 6. 操作

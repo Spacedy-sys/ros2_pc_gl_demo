@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>pc_gl_viewer</name>
+  <version>0.1.0</version>
+  <description>
+    ROS2 点云 OpenGL 可视化 demo：自写 32 线激光雷达仿真发布 PointCloud2，
+    订阅端手写解码 + 体素降采样，用零第三方依赖的 OpenGL 3.3 Core 渲染器显示
+    （点精灵 / turbo 调色板 / 轨道相机 / HUD）。
+  </description>
+  <maintainer email="24191214598@stu.xidian.edu.cn">张文博</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

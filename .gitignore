@@ -1,0 +1,30 @@
+# ---- 构建产物 ----
+build/
+build_*/
+_preview*/
+*.obj
+*.exe
+*.pdb
+*.lib
+*.ilk
+*.exp
+
+# ---- ROS2 / colcon ----
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# ---- 截图中间产物（BMP 体积大，且可用 --capture 重新生成）----
+docs/*.bmp
+docs/frames/
+
+# ---- 原始桌面截图：含个人桌面内容，不入库（README 用裁切后的 ubuntu_viewer.png）----
+docs/ubuntu_launch.png
+
+# ---- Python ----
+__pycache__/
+*.pyc
+
+# ---- 系统 ----
+Thumbs.db
+.DS_Store

@@ -1,0 +1,31 @@
+header:
+  stamp:
+    sec: 1793276879
+    nanosec: 320899436
+  frame_id: lidar_link
+height: 1
+width: 41563
+fields:
+- name: x
+  offset: 0
+  datatype: 7
+  count: 1
+- name: y
+  offset: 4
+  datatype: 7
+  count: 1
+- name: z
+  offset: 8
+  datatype: 7
+  count: 1
+- name: intensity
+  offset: 12
+  datatype: 7
+  count: 1
+is_bigendian: false
+point_step: 16
+row_step: 665008
+data:
+- 242
+- 48
+

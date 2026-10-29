@@ -1,0 +1,21 @@
+# 统一换行符：源码/文档用 LF（项目要在 Ubuntu 上构建），Windows 脚本用 CRLF
+* text=auto
+*.sh  text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.h   text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# 二进制（不要做任何行尾转换）
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.mp4  binary
+*.bmp  binary
+*.pdf  binary
+*.docx binary

@@ -14,24 +14,9 @@
 
 ---
 
-## 1. 这个 demo 想证明什么
-
-对应「C++ 应用软件工程师（空间智能产品线）」岗位的几条硬指标：
-
-| 岗位要求 | Demo 里的落点 |
-|---|---|
-| C++ 扎实、数据结构与算法 | PointCloud2 编解码（字段偏移/行填充/NaN/大端）、体素网格哈希（open addressing）、射线-AABB/圆柱求交 |
-| OpenGL / GPU 渲染管线 | GL 3.3 Core 上下文、GLSL 顶点/片元着色器、点精灵、`gl_PointSize` 透视衰减、VBO 流式上传、位图字体 HUD |
-| ROS SDK 开发 | 发布/订阅节点、`SensorDataQoS`、参数化、launch、PointCloud2 数据链路 |
-| Linux + 工程化 | ament/colcon、CMake、pkg-config 依赖、Git、可重复构建 |
-| 加分：点云 / SLAM 基础设施 | 体素降采样（等价 VoxelGrid）、ROI 裁剪、强度/高度/距离三种着色 |
-
-**设计取向**：不用 PCL、不用 RViz、不用 Open3D、不引 GLEW/GLAD/glm。
-渲染栈和数学库都是手写，约 2000 行，每一行都能在面试里讲清楚。
-
 ---
 
-## 2. 目录结构
+## . 目录结构
 
 ```
 ros2_pc_gl_demo/
@@ -54,7 +39,7 @@ ros2_pc_gl_demo/
 └─ docs/                              # 截图、GIF、字体图集、Ubuntu 部署提示词
 ```
 
-## 3. 数据流
+## . 数据流
 
 ```
 pc_cloud_publisher                       pc_gl_viewer
@@ -72,7 +57,7 @@ pc_cloud_publisher                       pc_gl_viewer
 
 ---
 
-## 4. 运行方式 A：Windows（无 ROS，用于渲染验收）
+## . 运行方式 A：Windows（无 ROS，用于渲染验收）
 
 需要 Visual Studio 2019/2022（C++ 桌面开发负载）+ CMake。
 
@@ -89,7 +74,7 @@ build\pc_gl_viewer_preview.exe --capture docs\hero_height_voxel.bmp --color 1 --
 build\pc_gl_viewer_preview.exe --capture-seq docs\frames\f --frames 30 --width 1000 --height 600
 ```
 
-## 5. 运行方式 B：Ubuntu + ROS2（主路径）
+## . 运行方式 B：Ubuntu + ROS2（主路径）
 
 本机实测环境：**Ubuntu 20.04 + ROS2 Foxy + RTX 4090**（见本节末尾截图）。
 代码同时兼容 Humble（22.04）与 Jazzy（24.04）——只依赖 `rclcpp` + `sensor_msgs`，没有版本相关 API。
@@ -125,7 +110,7 @@ ros2 run pc_gl_viewer pc_gl_viewer          # 只跑查看器（可订阅任何 
 > `ros2 topic hz /points | head` 打印 `BrokenPipeError` 是无害的（`head` 提前关管道）。
 > 小提示：`ros2 topic hz /points | head` 会打印 `BrokenPipeError`，那是 `head` 提前关管道导致的，无害。
 
-## 6. 操作
+## . 操作
 
 | 输入 | 作用 |
 |---|---|
@@ -142,7 +127,7 @@ ros2 run pc_gl_viewer pc_gl_viewer          # 只跑查看器（可订阅任何 
 
 ---
 
-## 7. 实测数据（RTX 4090 / OpenGL 3.3 Core；Windows 用 VS2019，Ubuntu 用 gcc）
+## . 实测数据（RTX 4090 / OpenGL 3.3 Core；Windows 用 VS2019，Ubuntu 用 gcc）
 
 | 指标 | 数值 | 来源 |
 |---|---|---|
@@ -191,25 +176,9 @@ ros2 run pc_gl_viewer pc_rate_probe
 
 ---
 
-## 8. 几个值得讲实现细节
 
-1. **零依赖 GL 加载器**（`core/gl_api.*`）：Windows 用 `wglGetProcAddress`、Linux 用 `glfwGetProcAddress`，
-   自己声明 ~39 个 2.0+ 入口；顺带踩过一个坑——函数指针的**声明与定义必须同在全局作用域**，
-   否则链接期报"无法解析的外部符号 + 已定义且可能匹配的符号 xxx"。
-2. **点云编解码的边界情况**（`core/cloud_wire.cpp`）：
-   - `row_step > width * point_step`（行填充）要用 `row_step` 作行 stride；
-   - `is_dense = false` 时跳过 NaN/Inf；
-   - `is_bigendian` 与主机字节序比较时容易写反（本项目自检抓到过一次真实 bug）；
-   - 缺字段/越界偏移要报错，不能越界读。
-3. **体素降采样**（`core/point_cloud.cpp`）：21bit/轴打包体素键 + FNV 混合 + 线性探测，
-   强度取均值；40k 点下 1 ms 量级，替换掉 PCL 的 `VoxelGrid`。
-4. **着色在 GPU 侧完成**：顶点属性只有 `vec3 pos + float intensity`，颜色映射写在 GLSL，
-   切换强度/高度/距离模式**不重传顶点数据**。
-5. **HUD**：开发机用 Pillow 把 Consolas 烘成 8bit 灰度图集（`tools/gen_font_atlas.py`），
-   运行时一次 `glTexImage2D` + 每字形一个 quad，避免引 freetype/imgui。
-6. **CPU_UP / CPU_DRAW 指标**：GL 是异步的，这两个数只是 CPU 提交耗时，端到端看 FPS。
 
-## 9. 后续可做（面试时主动说边界）
+## . 后续可做
 
 - 用 Compute Shader 做体素化 / 点云 LOD，替代 CPU 侧 `glBufferData`；
 - 多帧累积 + 位姿（TF）接入，做成真正的建图前端；
